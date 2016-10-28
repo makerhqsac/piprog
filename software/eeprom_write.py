@@ -15,6 +15,7 @@
 import RPi.GPIO as GPIO
 import subprocess
 import sys
+import signal
 import os
 import time
 
@@ -53,23 +54,24 @@ GPIO.setup(PIN_LED_RED, GPIO.OUT, initial=GPIO.LOW)
 
 def main():
     setup_i2c()
+    signal.signal(signal.SIGINT, handle_sigint)
 
     print("eeprom writer running - press button to program eeprom!")
 
-    try:
-        while True:
-            GPIO.output(PIN_LED_GREEN, GPIO.HIGH)
-            if GPIO.input(PIN_BUTTON) == GPIO.LOW:
-                print("writing eeprom... ")
-                GPIO.output(PIN_LED_GREEN, GPIO.LOW)
-                write_eeprom()
-                print("   DONE!")
-    except KeyboardInterrupt:
-        pass
-    finally:
-        GPIO.cleanup()
-        print("Exiting.")
-        exit(0)
+    while True:
+        GPIO.output(PIN_LED_GREEN, GPIO.HIGH)
+        if GPIO.input(PIN_BUTTON) == GPIO.LOW:
+            print("writing eeprom... ")
+            GPIO.output(PIN_LED_GREEN, GPIO.LOW)
+            write_eeprom()
+            print("   DONE!")
+
+
+def handle_sigint(signal, frame):
+    GPIO.cleanup()
+    print("Exiting.")
+    sys.exit(0)
+
 
 
 def setup_i2c():
