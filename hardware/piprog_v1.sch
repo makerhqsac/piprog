@@ -6201,6 +6201,8 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <part name="J1" library="SparkFun-Connectors" deviceset="M16" device="PTH"/>
 <part name="S1" library="SparkFun-Electromechanical" deviceset="SWITCH-MOMENTARY-2" device="PTH" value=""/>
 <part name="GND6" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
+<part name="VCC1" library="SparkFun-Aesthetics" deviceset="3.3V" device=""/>
+<part name="R8" library="SparkFun-Passives" deviceset="RESISTOR" device="PTH-1/4W" value="10k"/>
 </parts>
 <sheets>
 <sheet>
@@ -6240,6 +6242,8 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <instance part="J1" gate="G$1" x="127" y="101.6"/>
 <instance part="S1" gate="G$1" x="-45.72" y="58.42" rot="R90"/>
 <instance part="GND6" gate="1" x="-45.72" y="30.48"/>
+<instance part="VCC1" gate="G$1" x="-30.48" y="132.08"/>
+<instance part="R8" gate="G$1" x="-30.48" y="101.6" rot="R90"/>
 </instances>
 <busses>
 </busses>
@@ -6340,6 +6344,11 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <wire x1="-2.54" y1="33.02" x2="-2.54" y2="38.1" width="0.1524" layer="91"/>
 <junction x="-2.54" y="38.1"/>
 </segment>
+<segment>
+<pinref part="R8" gate="G$1" pin="2"/>
+<pinref part="VCC1" gate="G$1" pin="3.3V"/>
+<wire x1="-30.48" y1="106.68" x2="-30.48" y2="132.08" width="0.1524" layer="91"/>
+</segment>
 </net>
 <net name="SCK" class="0">
 <segment>
@@ -6370,9 +6379,11 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <label x="101.6" y="12.7" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="X1" gate="G$1" pin="GPIO12"/>
-<wire x1="-17.78" y1="81.28" x2="-27.94" y2="81.28" width="0.1524" layer="91"/>
-<label x="-27.94" y="81.28" size="1.778" layer="95"/>
+<pinref part="X1" gate="G$1" pin="GPIO25"/>
+<wire x1="-17.78" y1="93.98" x2="-30.48" y2="93.98" width="0.1524" layer="91"/>
+<label x="-25.4" y="93.98" size="1.778" layer="95"/>
+<pinref part="R8" gate="G$1" pin="1"/>
+<wire x1="-30.48" y1="93.98" x2="-30.48" y2="96.52" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="GND" class="0">
