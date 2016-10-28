@@ -1,24 +1,39 @@
+#!/usr/bin/env python
+###############################################################################
+# eeprom_write.py                                                             #
+#                                                                             #
+#    Python script to interact with a Raspberry Pi wearing a PiProg HAT to    #
+#    easily program EEPROMs.                                                  #
+#                                                                             #
+#    For more information, see https://github.com/makerhqsac/piprog           #
+#                                                                             #
+#    Written By Mike Machado <mike@machadolab.com>                            #
+#    Sponsored by MakerHQ - http://www.makerhq.org                            #
+#                                                                             #
+#    Licensed under the GPLv3 - https://www.gnu.org/licenses/gpl-3.0.txt      #
+###############################################################################
 import RPi.GPIO as GPIO
 import subprocess
 import sys
 import os
 import time
 
+
 ### Settings ###
 
 # Path to binary eeprom.epp file to write to eeprom.
-# Use the eepmake command from https://github.com/raspberrypi/hats/eepromutils to create this file
-# based on the information from eeprom_settings.txt
+# Use the eepmake command from https://github.com/raspberrypi/hats/eepromutils
+# to create this file based on the information from eeprom_settings.txt
 EEPROM_FILE = "/path/to/eeprom.eep"
 
-# Type of EEPROM. Supported types are "24c32", "24c64", "24c128", "24c512", "24c1024".
+# Type of EEPROM. Supported types: 24c32, 24c64, 24c128, 24c512, and 24c1024.
 EEPROM_TYPE = "24c32"
 
 
 
 
 
-### main code ##
+### main code ###
 
 PIN_LED_GREEN = 33
 PIN_LED_RED = 35
@@ -37,16 +52,24 @@ GPIO.setup(PIN_LED_RED, GPIO.OUT, initial=GPIO.LOW)
 
 
 def main():
-    print("eeprom writer running - press button to write eeprom!")
     setup_i2c()
-    while True:
-        GPIO.output(PIN_LED_GREEN, GPIO.HIGH)
-        if GPIO.input(PIN_BUTTON) == GPIO.LOW:
-            print("writing eeprom... ")
-            GPIO.output(PIN_LED_GREEN, GPIO.LOW)
-            write_eeprom()
-            print("   DONE!")
-    GPIO.cleanup()
+
+    print("eeprom writer running - press button to program eeprom!")
+
+    try:
+        while True:
+            GPIO.output(PIN_LED_GREEN, GPIO.HIGH)
+            if GPIO.input(PIN_BUTTON) == GPIO.LOW:
+                print("writing eeprom... ")
+                GPIO.output(PIN_LED_GREEN, GPIO.LOW)
+                write_eeprom()
+                print("   DONE!")
+    except KeyboardInterrupt:
+        pass
+    finally:
+        GPIO.cleanup()
+        print("Exiting.")
+        exit(0)
 
 
 def setup_i2c():
@@ -96,7 +119,6 @@ def write_eeprom():
         else:
             print("error writing eeprom")
             blink_led(PIN_LED_RED, 3, 0.5)
-
 
 
 if __name__ == '__main__':
