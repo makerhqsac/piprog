@@ -6193,7 +6193,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <part name="R7" library="SparkFun-Passives" deviceset="RESISTOR" device="PTH-1/4W" value="330"/>
 <part name="GND5" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
 <part name="FRAME1" library="SparkFun-Aesthetics" deviceset="FRAME-LETTER" device="NO_PACKAGE"/>
-<part name="C1" library="SparkFun-Passives" deviceset="CAP" device="PTH"/>
+<part name="C1" library="SparkFun-Passives" deviceset="CAP" device="PTH" value="0.1uF"/>
 <part name="R1" library="SparkFun-Passives" deviceset="RESISTOR" device="PTH-1/4W" value="3.9k"/>
 <part name="R2" library="SparkFun-Passives" deviceset="RESISTOR" device="PTH-1/4W" value="3.9k"/>
 <part name="U$2" library="SparkFun-Connectors" deviceset="ZIFSOCKET-40-6" device="DIL40-6-ZIF_SOCKET"/>
