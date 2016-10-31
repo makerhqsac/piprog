@@ -22,6 +22,24 @@ import time
 
 ### Settings ###
 
+# Type of MCU being flashed. See avrdude(4) for the -p option for more information.
+PART_NUMBER = "m328p"
+
+# Path to binary hex file to be flashed to the MCU. Popular arduino bootloaders can be found at:
+# https://github.com/arduino/Arduino/tree/master/hardware/arduino/avr/bootloaders
+HEX_FILE = "/path/to/program.hex"
+
+# MCU fuse bits to set. Double check these are correct for your chip!! Leave blank to skip fuses.
+# A useful tool for finding fuse values: http://www.engbedded.com/fusecalc
+FUSE_LOW = ""
+FUSE_HIGH = ""
+FUSE_EXTENDED = ""
+
+# Leave blank to skip locking.
+LOCK_BITS = ""
+
+
+
 # Path to avrdude.
 AVRDUDE_PATH = "/usr/bin/avrdude"
 
@@ -30,22 +48,6 @@ SPI_DEV = "/dev/spidev0.0"
 
 # Baud rate to use while programming the MCU.
 BAUD_RATE = "250000"
-
-# Type of MCU being flashed. See avrdude(4) for the -p option for more information.
-PART_NUMBER = "m328p"
-
-# Path to binary hex file to be flashed to the MCU. Popular arduino bootloaders can be found at:
-# https://github.com/arduino/Arduino/tree/master/hardware/arduino/avr/bootloaders
-HEX_FILE = "/path/to/program.hex"
-
-# MCU fuse bits to set. Double check these are correct for your chip!!
-# A useful tool for finding fuse values: http://www.engbedded.com/fusecalc
-FUSE_LOW = "0xE2"
-FUSE_HIGH = "0xDE"
-FUSE_EXTENDED = "0x05"
-
-# leave blank for no lock bits
-LOCK_BITS = ""
 
 
 
@@ -101,16 +103,6 @@ def flash_mcu():
     else:
         FNULL = open(os.devnull, 'w')
 
-        result = subprocess.call(avrdude_fuse_params(), stdout=FNULL, stderr=subprocess.STDOUT)
-        if result != 0:
-            print("error setting mcu fuses")
-            blink_led(PIN_LED_RED, 3, 0.5)
-            return result
-        else:
-            print("fuses set")
-
-        time.sleep(2)
-
         result = subprocess.call(avrdude_flash_params(), stdout=FNULL, stderr=subprocess.STDOUT)
 
         GPIO.output(PIN_LED_GREEN, GPIO.LOW)
@@ -118,7 +110,17 @@ def flash_mcu():
 
         if result == 0:
             print("mcu flash successful")
-            blink_led(PIN_LED_GREEN, 3, 0.2)
+            if FUSE_LOW != "" and FUSE_HIGH != "" and FUSE_EXTENDED != "":
+                time.sleep(2)
+                result = subprocess.call(avrdude_fuse_params(), stdout=FNULL, stderr=subprocess.STDOUT)
+                if result == 0:
+                    print("fuses set")
+                    blink_led(PIN_LED_GREEN, 3, 0.2)
+                else:
+                    print("error setting mcu fuses")
+                    blink_led(PIN_LED_RED, 3, 0.5)
+            else:
+                blink_led(PIN_LED_GREEN, 3, 0.2)
         else:
             print("error flashing mcu")
             blink_led(PIN_LED_RED, 3, 0.5)
