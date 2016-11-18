@@ -123,7 +123,7 @@ def write_eeprom():
         print("eeprom file " + eeprom_binary_file + " does not exist!")
         blink_led(PIN_LED_RED, 3, 0.6)
     else:
-        result = subprocess.call(["dd", "if=" + EEPROM_SETTINGS_FILE, "of=" + I2C_DEV_PATH + "/" + I2C_DEV_NAME + "/eeprom"], stdout=FNULL, stderr=subprocess.STDOUT)
+        result = subprocess.call(["dd", "if=" + eeprom_binary_file, "of=" + I2C_DEV_PATH + "/" + I2C_DEV_NAME + "/eeprom"], stdout=FNULL, stderr=subprocess.STDOUT)
 
         GPIO.output(PIN_LED_GREEN, GPIO.LOW)
         GPIO.output(PIN_LED_RED, GPIO.LOW)
